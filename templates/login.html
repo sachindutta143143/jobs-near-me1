@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#07071a;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.glow{position:fixed;top:-200px;left:-200px;width:500px;height:500px;background:radial-gradient(circle,rgba(34,197,94,0.06),transparent 70%);pointer-events:none}
+.box{background:linear-gradient(145deg,rgba(30,30,74,0.9),rgba(15,15,40,0.95));border:1px solid #1e1e4a;padding:40px 30px;border-radius:24px;width:90%;max-width:380px;text-align:center;box-shadow:0 30px 60px rgba(0,0,0,0.5)}
+.lock{font-size:60px;margin-bottom:15px}
+.box h2{font-size:22px;font-weight:700;margin-bottom:5px}
+.box p{font-size:13px;color:#64748b;margin-bottom:25px}
+input{width:100%;padding:14px 18px;border-radius:14px;border:2px solid #2a2a5a;background:#0d0d25;color:#fff;font-size:15px;text-align:center;letter-spacing:3px;outline:none;transition:0.3s;margin-bottom:15px}
+input:focus{border-color:#22c55e;box-shadow:0 0 20px rgba(34,197,94,0.1)}
+input::placeholder{letter-spacing:1px;color:#4a5568}
+button{width:100%;padding:14px;background:linear-gradient(135deg,#22c55e,#16a34a);border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;transition:0.2s}
+button:hover{box-shadow:0 8px 25px rgba(34,197,94,0.3);transform:translateY(-2px)}
+.err{color:#ef4444;font-size:13px;margin-top:10px;display:none}
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<div class="box">
+  <div class="lock">🔐</div>
+  <h2>Admin Panel</h2>
+  <p>Enter password to continue</p>
+  <input id="pw" type="password" placeholder="••••••" autofocus onkeydown="if(event.key==='Enter')login()">
+  <button onclick="login()">Unlock →</button>
+  <div class="err" id="err">Wrong password</div>
+</div>
+<script>
+async function login(){
+  let pw=document.getElementById("pw").value;
+  if(!pw)return;
+  try{
+    let r=await fetch("/admin/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:pw})});
+    let d=await r.json();
+    if(d.ok)location.reload();
+    else document.getElementById("err").style.display="block";
+  }catch(e){document.getElementById("err").style.display="block"}
+}
+</script>
+</body>
+</html>

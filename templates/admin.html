@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#07071a;color:#fff;padding:12px;min-height:100vh}
+
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:linear-gradient(135deg,#1a1a3e,#0d0d2b);border-radius:14px;margin-bottom:12px;border:1px solid #1e1e4a}
+.top h2{font-size:17px}.top h2 em{color:#22c55e;font-style:normal}
+.toplinks{display:flex;gap:6px}
+.toplinks a{color:#94a3b8;text-decoration:none;font-size:11px;padding:7px 12px;background:#1e1e4a;border-radius:8px;border:1px solid #2a2a5a}
+
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.box3{background:linear-gradient(135deg,#1e1e4a,#141432);padding:12px;border-radius:12px;text-align:center;border:1px solid #2a2a5a}
+.box3 .num{font-size:24px;font-weight:700}
+.box3 .lbl{font-size:9px;color:#64748b;margin-top:2px}
+.x1 .num{color:#f59e0b}.x2 .num{color:#3b82f6}.x3 .num{color:#22c55e}
+
+.greenbox{background:linear-gradient(135deg,#0d2818,#0a1a10);border:1px solid rgba(34,197,94,0.2);padding:14px;border-radius:12px;margin-bottom:12px}
+.greenbox h3{font-size:13px;margin-bottom:6px;color:#22c55e}
+.ginfo{font-size:11px;color:#64748b;margin-bottom:8px;line-height:1.5}
+.ginfo b{color:#22c55e}
+.gsrc{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.gsrc span{padding:2px 7px;background:#1e1e4a;border-radius:6px;font-size:9px;color:#94a3b8}
+
+.bulkrow{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+
+.card{background:linear-gradient(135deg,#1a1a3e,#0d0d2b);padding:16px;border-radius:14px;margin-bottom:12px;border:1px solid #1e1e4a}
+.card h3{margin-bottom:8px;font-size:14px}
+
+.field{margin-bottom:7px}
+.field label{font-size:10px;color:#64748b;margin-bottom:2px;display:block}
+input,textarea,select{width:100%;padding:9px 11px;border-radius:10px;border:1.5px solid #1e1e4a;background:#0d0d25;color:#fff;font-size:12px;outline:none;font-family:'Poppins'}
+input:focus,textarea:focus{border-color:#22c55e}
+textarea{min-height:55px;resize:vertical}
+
+.imgbox{display:flex;gap:10px;align-items:flex-start;margin-top:5px}
+.imgthumb{width:80px;height:80px;border-radius:12px;border:2px dashed #2a2a5a;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#0d0d25;flex-shrink:0;position:relative}
+.imgthumb img{width:100%;height:100%;object-fit:cover}
+.imgthumb img.off{display:none}
+.imgthumb .ico{font-size:24px;opacity:0.15;position:absolute}
+.imgright{flex:1}
+
+.ubtn{padding:7px 12px;background:linear-gradient(135deg,#6366f1,#4f46e5);border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:11px;font-family:'Poppins'}
+.ortxt{font-size:10px;color:#475569;margin:4px 0}
+
+.btn{padding:8px 13px;border:none;border-radius:9px;cursor:pointer;font-size:11px;font-weight:500;font-family:'Poppins';display:inline-flex;align-items:center;gap:3px;transition:0.15s;color:#fff}
+.btn:active{transform:scale(0.95)}
+.btn[disabled]{opacity:0.35;cursor:default;transform:none}
+.btn-green{background:linear-gradient(135deg,#22c55e,#16a34a)}
+.btn-blue{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+.btn-purple{background:linear-gradient(135deg,#a855f7,#7c3aed)}
+.btn-yellow{background:linear-gradient(135deg,#f59e0b,#d97706)}
+.btn-red{background:linear-gradient(135deg,#ef4444,#dc2626)}
+.btn-gray{background:#475569}
+.btn-wide{width:100%;padding:12px;font-size:13px;font-weight:600;margin-top:6px;justify-content:center}
+
+.tabrow{display:flex;gap:7px;margin-bottom:12px;overflow-x:auto}
+.tabrow::-webkit-scrollbar{display:none}
+.tabitem{padding:9px 16px;background:rgba(30,30,74,0.7);border:1.5px solid #1e1e4a;border-radius:22px;cursor:pointer;white-space:nowrap;font-size:12px;font-weight:500;color:#64748b}
+.tabitem:hover{border-color:#22c55e;color:#fff}
+.tabitem.sel{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border-color:#22c55e}
+.tabitem .cc{font-size:9px;background:rgba(255,255,255,0.2);padding:1px 6px;border-radius:7px;margin-left:3px}
+
+.jobcard{background:linear-gradient(155deg,rgba(25,25,65,0.85),rgba(12,12,35,0.95));padding:12px;border-radius:12px;margin-bottom:8px;border:1.5px solid #1e1e4a}
+.jobcard:hover{border-color:rgba(34,197,94,0.25)}
+.jhead{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px}
+.jtitle{font-weight:600;font-size:12px;line-height:1.35;flex:1}
+.jthumb{width:50px;height:50px;object-fit:cover;border-radius:8px;border:1px solid #1e1e4a;flex-shrink:0}
+.jthumb.off{display:none}
+.jmeta{font-size:10px;color:#475569;margin-bottom:3px}
+.jid{font-size:8px;color:#2a3a4a;font-family:monospace;margin-bottom:5px;word-break:break-all}
+.jbtns{display:flex;gap:4px;flex-wrap:wrap;padding-top:6px;border-top:1px solid #1e1e3a}
+
+.spin{display:inline-block;width:11px;height:11px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:rot 0.5s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+
+.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);display:none;justify-content:center;align-items:flex-start;z-index:1000;padding:15px;overflow-y:auto}
+.overlay.open{display:flex}
+.popup{background:linear-gradient(135deg,#1a1a3e,#0d0d2b);padding:20px;width:100%;max-width:550px;border-radius:16px;border:1px solid #2a2a5a;margin-top:15px}
+.popup h3{margin-bottom:12px;font-size:15px}
+
+.notif{position:fixed;bottom:18px;left:50%;padding:11px 22px;border-radius:12px;font-size:12px;font-weight:600;z-index:2000;box-shadow:0 8px 25px rgba(0,0,0,0.4);transform:translateX(-50%) translateY(80px);transition:transform 0.3s}
+.notif.on{transform:translateX(-50%) translateY(0)}
+.notif.green{background:#22c55e;color:#fff}
+.notif.red{background:#ef4444;color:#fff}
+.notif.blue{background:#3b82f6;color:#fff}
+
+.none{text-align:center;padding:35px;opacity:0.25;font-size:13px}
+
+@media(max-width:500px){.row3{gap:5px}.box3{padding:8px}.box3 .num{font-size:20px}.jbtns{gap:3px}.btn{padding:6px 9px;font-size:10px}.bulkrow{flex-direction:column}.bulkrow .btn{justify-content:center}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <h2>🔥 <em>Admin</em></h2>
+  <div class="toplinks"><a href="/">🏠</a><a href="/admin/logout">🚪</a></div>
+</div>
+
+<div class="row3">
+  <div class="box3 x1"><div class="num" id="cntS">0</div><div class="lbl">📥 Scraped</div></div>
+  <div class="box3 x2"><div class="num" id="cntT">0</div><div class="lbl">📦 Store</div></div>
+  <div class="box3 x3"><div class="num" id="cntP">0</div><div class="lbl">🚀 Published</div></div>
+</div>
+
+<div class="greenbox">
+  <h3>🤖 Scraper</h3>
+  <div class="ginfo" id="ginfo">Loading...</div>
+  <div class="gsrc" id="gsrc"></div>
+  <button type="button" class="btn btn-green btn-wide" id="scrBtn" onclick="scrapeNow()">🔄 Scrape Now</button>
+</div>
+
+<div class="bulkrow">
+  <button type="button" class="btn btn-blue" onclick="bulkMoveAll()">📥➡📦 All to Store</button>
+  <button type="button" class="btn btn-purple" onclick="bulkPubAll()">📦➡🚀 Publish All</button>
+</div>
+
+<div class="card">
+  <h3>➕ Add Job</h3>
+  <div class="field"><label>Title *</label><input id="f-title" placeholder="Job title"></div>
+  <div class="field"><label>Details</label><textarea id="f-det"></textarea></div>
+  <div class="field">
+    <label>Image</label>
+    <div class="imgbox">
+      <div class="imgthumb"><span class="ico">📷</span><img id="f-prev" class="off" onerror="this.className='off'"></div>
+      <div class="imgright">
+        <input type="file" id="f-file" accept="image/*" style="display:none" onchange="doUpload(this,'f-img','f-prev')">
+        <button type="button" class="ubtn" onclick="document.getElementById('f-file').click()">📁 Upload</button>
+        <div class="ortxt">or paste URL</div>
+        <input id="f-img" placeholder="https://..." oninput="showPrev(this.value,'f-prev')">
+      </div>
+    </div>
+  </div>
+  <div class="field"><label>Apply Link</label><input id="f-link"></div>
+  <div class="field"><label>Link 2</label><input id="f-l2"></div>
+  <div class="field"><label>Link 3</label><input id="f-l3"></div>
+  <div class="field"><label>Location</label><input id="f-loc" placeholder="Assam, Delhi..."></div>
+  <div class="field"><label>Category</label><select id="f-cat"><option value="assam">Assam</option><option value="india">All India</option><option value="private">Private</option></select></div>
+  <div class="field"><label>Deadline</label><input id="f-dl" type="date"></div>
+  <button type="button" class="btn btn-green btn-wide" id="addBtn" onclick="addJob()">➕ Add Job</button>
+</div>
+
+<div class="tabrow" id="tabs"></div>
+<div id="joblist"></div>
+
+<div class="overlay" id="editbox" onclick="if(event.target===this)closeEdit()">
+  <div class="popup">
+    <h3>✏️ Edit Job</h3>
+    <div class="field"><label>Title</label><input id="e-title"></div>
+    <div class="field"><label>Details</label><textarea id="e-det" style="min-height:100px"></textarea></div>
+    <div class="field">
+      <label>Image</label>
+      <div class="imgbox">
+        <div class="imgthumb"><span class="ico">📷</span><img id="e-prev" class="off" onerror="this.className='off'"></div>
+        <div class="imgright">
+          <input type="file" id="e-file" accept="image/*" style="display:none" onchange="doUpload(this,'e-img','e-prev')">
+          <button type="button" class="ubtn" onclick="document.getElementById('e-file').click()">📁 Upload</button>
+          <div class="ortxt">or URL</div>
+          <input id="e-img" oninput="showPrev(this.value,'e-prev')">
+        </div>
+      </div>
+    </div>
+    <div class="field"><label>Apply Link</label><input id="e-l1"></div>
+    <div class="field"><label>Link 2</label><input id="e-l2"></div>
+    <div class="field"><label>Link 3</label><input id="e-l3"></div>
+    <div class="field"><label>Location</label><input id="e-loc"></div>
+    <div class="field"><label>Category</label><select id="e-cat"><option value="assam">Assam</option><option value="india">India</option><option value="private">Private</option></select></div>
+    <div class="field"><label>Deadline</label><input id="e-dl" type="date"></div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button type="button" class="btn btn-green" id="saveBtn" onclick="saveEdit()">💾 Save</button>
+      <button type="button" class="btn btn-gray" onclick="closeEdit()">✖ Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+
+<script>
+// ===== GLOBALS =====
+var TAB = "scraped";
+var SCRAPED_DATA = [];
+var STORE_DATA = [];
+var PUB_DATA = [];
+var EDIT_ID = "";
+
+// ===== NOTIFY =====
+function notify(text, color) {
+  var el = document.getElementById("notif");
+  el.textContent = text;
+  el.className = "notif " + color + " on";
+  setTimeout(function() { el.classList.remove("on"); }, 3500);
+}
+
+// ===== IMAGE =====
+function showPrev(url, id) {
+  var img = document.getElementById(id);
+  var ico = img.parentElement.querySelector(".ico");
+  if (url && (url.indexOf("http") === 0 || url.indexOf("/uploads") === 0)) {
+    img.src = url; img.className = ""; if (ico) ico.style.display = "none";
+  } else {
+    img.className = "off"; if (ico) ico.style.display = "";
+  }
+}
+
+function doUpload(input, urlId, prevId) {
+  var file = input.files[0];
+  if (!file) return;
+  if (file.size > 5242880) { notify("❌ Max 5MB", "red"); return; }
+
+  var fd = new FormData();
+  fd.append("file", file);
+
+  fetch("/upload-image", { method: "POST", body: fd })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.error) { notify("❌ " + d.error, "red"); return; }
+      document.getElementById(urlId).value = d.url;
+      showPrev(d.url, prevId);
+      notify("✅ Uploaded!", "green");
+    })
+    .catch(function() { notify("❌ Upload failed", "red"); });
+  input.value = "";
+}
+
+// ===== SINGLE API CALL =====
+function callAPI(body, callback) {
+  fetch("/api/action", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  })
+  .then(function(r) {
+    if (r.status === 401) { location.reload(); return null; }
+    return r.json();
+  })
+  .then(function(d) {
+    if (d) callback(d);
+  })
+  .catch(function(err) {
+    console.error("API error:", err);
+    notify("❌ Network error", "red");
+  });
+}
+
+// ===== SCRAPER =====
+function loadScrapeInfo() {
+  fetch("/admin/scrape-status")
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var last = d.last ? new Date(d.last * 1000).toLocaleString() : "Never";
+      document.getElementById("ginfo").innerHTML = "📊 Total: <b>" + d.total + "</b> | 🕐 " + last;
+      var h = "";
+      var s = d.sources || {};
+      for (var k in s) h += "<span>" + k + ": " + s[k] + "</span>";
+      document.getElementById("gsrc").innerHTML = h;
+    })
+    .catch(function() {});
+}
+
+function scrapeNow() {
+  var btn = document.getElementById("scrBtn");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> Working...';
+  fetch("/admin/scrape-now", { method: "POST" })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.error) notify("❌ " + d.error, "red");
+      else { notify("🤖 " + d.message, "blue"); setTimeout(function() { loadAll(); loadScrapeInfo(); }, 20000); }
+    })
+    .catch(function() { notify("❌", "red"); });
+  setTimeout(function() { btn.disabled = false; btn.innerHTML = "🔄 Scrape Now"; }, 5000);
+}
+
+// ===== BULK =====
+function bulkMoveAll() {
+  if (!confirm("Move ALL scraped to store?")) return;
+  fetch("/api/bulk", { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify({action:"move-all"}) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) { if (d.error) notify("❌ "+d.error,"red"); else { notify("✅ Moved "+d.moved,"green"); loadAll(); } })
+    .catch(function() { notify("❌","red"); });
+}
+
+function bulkPubAll() {
+  if (!confirm("Publish ALL store?")) return;
+  fetch("/api/bulk", { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify({action:"publish-all"}) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) { if (d.error) notify("❌ "+d.error,"red"); else { notify("🚀 Published "+d.published+" Total:"+d.total,"green"); loadAll(); } })
+    .catch(function() { notify("❌","red"); });
+}
+
+// ===== LOAD ALL =====
+function loadAll() {
+  fetch("/admin/jobs?t=" + Date.now())
+    .then(function(r) {
+      if (r.status === 401) { location.reload(); return null; }
+      return r.json();
+    })
+    .then(function(d) {
+      if (!d) return;
+      SCRAPED_DATA = d.scraped || [];
+      STORE_DATA = d.store || [];
+      PUB_DATA = d.published || [];
+      document.getElementById("cntS").textContent = SCRAPED_DATA.length;
+      document.getElementById("cntT").textContent = STORE_DATA.length;
+      document.getElementById("cntP").textContent = PUB_DATA.length;
+      makeTabs();
+      render();
+    })
+    .catch(function() { notify("❌ Load failed", "red"); });
+}
+
+function makeTabs() {
+  var h = "";
+  h += '<div class="tabitem ' + (TAB==="scraped"?"sel":"") + '" onclick="switchTab(\'scraped\')">📥 Scraped<span class="cc">' + SCRAPED_DATA.length + '</span></div>';
+  h += '<div class="tabitem ' + (TAB==="store"?"sel":"") + '" onclick="switchTab(\'store\')">📦 Store<span class="cc">' + STORE_DATA.length + '</span></div>';
+  h += '<div class="tabitem ' + (TAB==="published"?"sel":"") + '" onclick="switchTab(\'published\')">🚀 Published<span class="cc">' + PUB_DATA.length + '</span></div>';
+  document.getElementById("tabs").innerHTML = h;
+}
+
+function switchTab(t) {
+  TAB = t;
+  makeTabs();
+  render();
+}
+
+// ===== GET CURRENT LIST =====
+function currentData() {
+  if (TAB === "scraped") return SCRAPED_DATA;
+  if (TAB === "store") return STORE_DATA;
+  return PUB_DATA;
+}
+
+// ===== RENDER =====
+function render() {
+  var list = currentData();
+  if (!list.length) {
+    document.getElementById("joblist").innerHTML = '<div class="none">📭 No jobs</div>';
+    return;
+  }
+
+  var h = "";
+  for (var i = 0; i < list.length; i++) {
+    var j = list[i];
+    var col = j.status === "published" ? "#22c55e" : j.status === "stored" ? "#3b82f6" : "#f59e0b";
+    var thumb = "";
+    if (j.image) {
+      thumb = '<img src="' + safe(j.image) + '" class="jthumb" onerror="this.className=\'jthumb off\'">';
+    }
+
+    h += '<div class="jobcard">';
+    h += '<div class="jhead"><div class="jtitle">' + (i+1) + '. ' + safe(j.title || "Untitled") + '</div>' + thumb + '</div>';
+    h += '<div class="jmeta"><span style="color:'+col+'">●</span> ' + safe(j.status||"") + ' | ' + safe(j.category||"") + ' | 📍' + safe(j.location||"");
+    if (j.source) h += ' | ' + safe(j.source);
+    h += '</div>';
+    h += '<div class="jid">' + safe(j.id) + '</div>';
+    h += '<div class="jbtns">';
+
+    h += '<button type="button" class="btn btn-yellow" onclick="clickEdit('+i+')">✏️ Edit</button>';
+
+    if (TAB === "scraped") {
+      h += '<button type="button" class="btn btn-blue" onclick="clickMove('+i+',this)">➡ Store</button>';
+    }
+    if (TAB === "store") {
+      h += '<button type="button" class="btn btn-purple" onclick="clickPublish('+i+',this)">🚀 Publish</button>';
+    }
+    if (TAB === "published") {
+      h += '<button type="button" class="btn btn-blue" onclick="clickUnpub('+i+',this)">📦 Unpub</button>';
+    }
+
+    h += '<button type="button" class="btn btn-red" onclick="clickDel('+i+',this)">🗑</button>';
+    h += '</div></div>';
+  }
+
+  document.getElementById("joblist").innerHTML = h;
+}
+
+function safe(t) {
+  if (!t) return "";
+  var d = document.createElement("div");
+  d.textContent = String(t);
+  return d.innerHTML;
+}
+
+// ===== 🔥 BUTTON HANDLERS =====
+
+function clickEdit(idx) {
+  var job = currentData()[idx];
+  if (!job) { notify("❌ Not found", "red"); return; }
+  openEdit(job); // 🔥 DIRECT EXACT JOB PASS KIYA (KABHI MIX NAHI HOGA)
+}
+
+function clickMove(idx, btn) {
+  var job = currentData()[idx];
+  if (!job) { notify("❌ Not found", "red"); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span>';
+
+  callAPI({ action: "move", id: String(job.id) }, function(d) {
+    btn.disabled = false;
+    btn.innerHTML = "➡ Store";
+    if (d.error) { notify("❌ " + d.error, "red"); }
+    else { notify("➡ Moved!", "green"); loadAll(); }
+  });
+}
+
+function clickPublish(idx, btn) {
+  var job = currentData()[idx];
+  if (!job) { notify("❌ Not found", "red"); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span>';
+
+  callAPI({ action: "publish", id: String(job.id) }, function(d) {
+    btn.disabled = false;
+    btn.innerHTML = "🚀 Publish";
+    if (d.error) { notify("❌ " + d.error, "red"); }
+    else { notify("🚀 Published! Total:" + (d.total||"?"), "green"); loadAll(); }
+  });
+}
+
+function clickUnpub(idx, btn) {
+  var job = currentData()[idx];
+  if (!job) { notify("❌ Not found", "red"); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span>';
+
+  callAPI({ action: "unpublish", id: String(job.id) }, function(d) {
+    btn.disabled = false;
+    btn.innerHTML = "📦 Unpub";
+    if (d.error) { notify("❌ " + d.error, "red"); }
+    else { notify("📦 Done!", "green"); loadAll(); }
+  });
+}
+
+function clickDel(idx, btn) {
+  var job = currentData()[idx];
+  if (!job) { notify("❌ Not found", "red"); return; }
+  if (!confirm("🗑 Delete?")) return;
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span>';
+
+  callAPI({ action: "delete", id: String(job.id) }, function(d) {
+    btn.disabled = false;
+    btn.innerHTML = "🗑";
+    notify("🗑 Deleted!", "green");
+    loadAll();
+  });
+}
+
+// ===== ADD JOB =====
+function addJob() {
+  var title = document.getElementById("f-title").value.trim();
+  if (!title) { notify("❌ Title required", "red"); return; }
+
+  var btn = document.getElementById("addBtn");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span>';
+
+  fetch("/add-job", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: title,
+      details: document.getElementById("f-det").value,
+      image: document.getElementById("f-img").value,
+      apply_link: document.getElementById("f-link").value,
+      link2: document.getElementById("f-l2").value,
+      link3: document.getElementById("f-l3").value,
+      location: document.getElementById("f-loc").value,
+      category: document.getElementById("f-cat").value,
+      deadline: document.getElementById("f-dl").value
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(d) {
+    btn.disabled = false;
+    btn.innerHTML = "➕ Add Job";
+    if (d.error) { notify("❌ " + d.error, "red"); }
+    else {
+      notify("✅ Added!", "green");
+      var ids = ["f-title","f-det","f-img","f-link","f-l2","f-l3","f-loc","f-dl"];
+      for (var i = 0; i < ids.length; i++) document.getElementById(ids[i]).value = "";
+      var prev = document.getElementById("f-prev");
+      prev.className = "off";
+      var ico = prev.parentElement.querySelector(".ico");
+      if (ico) ico.style.display = "";
+      loadAll();
+    }
+  })
+  .catch(function() { btn.disabled=false; btn.innerHTML="➕ Add Job"; notify("❌","red"); });
+}
+
+// ===== 🔥 FIXED EDIT MODAL =====
+function openEdit(job) {
+  EDIT_ID = String(job.id);
+  document.getElementById("e-title").value = job.title || "";
+  document.getElementById("e-det").value = job.details || "";
+  document.getElementById("e-img").value = job.image || "";
+  document.getElementById("e-l1").value = job.apply_link || "";
+  document.getElementById("e-l2").value = job.link2 || "";
+  document.getElementById("e-l3").value = job.link3 || "";
+  document.getElementById("e-loc").value = job.location || "";
+  document.getElementById("e-cat").value = job.category || "assam";
+  document.getElementById("e-dl").value = job.deadline || "";
+  showPrev(job.image || "", "e-prev");
+  document.getElementById("editbox").classList.add("open");
+}
+
+function closeEdit() {
+  document.getElementById("editbox").classList.remove("open");
+}
+
+function saveEdit() {
+  var btn = document.getElementById("saveBtn");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span>';
+
+  callAPI({
+    action: "update",
+    id: EDIT_ID,
+    data: {
+      title: document.getElementById("e-title").value,
+      details: document.getElementById("e-det").value,
+      image: document.getElementById("e-img").value,
+      apply_link: document.getElementById("e-l1").value,
+      link2: document.getElementById("e-l2").value,
+      link3: document.getElementById("e-l3").value,
+      location: document.getElementById("e-loc").value,
+      category: document.getElementById("e-cat").value,
+      deadline: document.getElementById("e-dl").value
+    }
+  }, function(d) {
+    btn.disabled = false;
+    btn.innerHTML = "💾 Save";
+    if (d.error) { notify("❌ " + d.error, "red"); }
+    else { notify("✅ Saved!", "green"); closeEdit(); loadAll(); }
+  });
+}
+
+// ===== INIT =====
+loadAll();
+loadScrapeInfo();
+</script>
+</body>
+</html>

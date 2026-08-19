@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jobs Near Me --Find Your Dream Job</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#07071a;color:#fff;overflow-x:hidden}
+
+.g1{position:fixed;top:-250px;left:-250px;width:600px;height:600px;background:radial-gradient(circle,rgba(34,197,94,0.06),transparent 70%);pointer-events:none;animation:float 8s ease-in-out infinite}
+.g2{position:fixed;bottom:-250px;right:-250px;width:700px;height:700px;background:radial-gradient(circle,rgba(99,102,241,0.06),transparent 70%);pointer-events:none;animation:float 10s ease-in-out infinite reverse}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,30px)}}
+
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:100;padding:14px 20px;background:rgba(7,7,26,0.8);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.04)}
+.logo{font-size:20px;font-weight:800;background:linear-gradient(135deg,#22c55e,#06b6d4,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% 200%;animation:grad 4s ease infinite}
+@keyframes grad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.mbtn{width:38px;height:38px;background:rgba(30,30,74,0.8);border:1px solid #2a2a5a;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:0.2s}
+.mbtn:hover{background:#2a2a5a;border-color:#22c55e}
+
+/* MENU */
+.mn{display:none;position:fixed;top:65px;right:15px;background:rgba(15,15,40,0.95);backdrop-filter:blur(25px);padding:10px;border-radius:16px;width:210px;z-index:200;border:1px solid #2a2a5a;box-shadow:0 25px 50px rgba(0,0,0,0.6)}
+.mn.show{display:block}
+.mn a{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;border-radius:12px;font-size:14px;color:#fff;text-decoration:none;transition:0.15s}
+.mn a:hover{background:rgba(34,197,94,0.08)}
+
+/* HERO */
+.hero{padding:50px 20px 35px;text-align:center;position:relative;z-index:1}
+.hero h1{font-size:30px;font-weight:800;line-height:1.3;margin-bottom:8px}
+.hero .hl{background:linear-gradient(135deg,#22c55e,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:#94a3b8;font-size:14px}
+.hero .live{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:6px 14px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.15);border-radius:20px;font-size:12px;color:#22c55e}
+.hero .dot{width:8px;height:8px;background:#22c55e;border-radius:50%;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.8)}}
+
+/* SEARCH */
+.srch{padding:0 20px 16px;position:relative;z-index:1}
+.sbox{display:flex;gap:8px;background:rgba(20,20,50,0.7);border:1.5px solid #1e1e4a;border-radius:16px;padding:5px;transition:0.3s}
+.sbox:focus-within{border-color:#22c55e;box-shadow:0 0 25px rgba(34,197,94,0.08)}
+.sbox input{flex:1;padding:13px 16px;border:none;outline:none;background:transparent;color:#fff;font-size:14px}
+.sbox input::placeholder{color:#5b6b82}
+.sbtn{padding:12px 22px;background:linear-gradient(135deg,#22c55e,#16a34a);border:none;border-radius:12px;color:#fff;cursor:pointer;font-weight:700;font-size:13px;transition:0.2s;white-space:nowrap}
+.sbtn:hover{box-shadow:0 6px 20px rgba(34,197,94,0.25)}
+
+/* TABS */
+.tabwrap{padding:0 20px 14px;position:relative;z-index:1}
+.tabs{display:flex;gap:8px;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:10px 18px;background:rgba(20,20,50,0.7);border:1.5px solid #1e1e4a;border-radius:30px;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:500;color:#94a3b8;transition:0.25s}
+.tab:hover{border-color:#22c55e;color:#fff}
+.tab.on{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border-color:#22c55e;box-shadow:0 4px 18px rgba(34,197,94,0.25)}
+.tab .c{background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:10px;font-size:10px;margin-left:5px}
+
+/* STATE */
+.stawrap{padding:0 20px 14px;display:none;position:relative;z-index:1}
+.stawrap.show{display:block}
+.stawrap select{width:100%;padding:12px;border-radius:14px;border:1.5px solid #1e1e4a;background:rgba(20,20,50,0.7);color:#fff;font-size:13px;outline:none}
+.stawrap select:focus{border-color:#22c55e}
+
+/* INFO */
+.info{padding:3px 20px 8px;font-size:12px;color:#64748b;position:relative;z-index:1}
+
+/* GRID */
+.grid{padding:0 20px 24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;position:relative;z-index:1}
+
+/* CARD */
+.card{
+  background:linear-gradient(155deg,rgba(25,25,65,0.85),rgba(12,12,35,0.95));
+  border:1.5px solid rgba(30,30,74,0.6);
+  border-radius:20px;
+  overflow:hidden;
+  transition:0.35s cubic-bezier(0.4,0,0.2,1);
+  cursor:pointer;
+  position:relative;
+}
+.card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;
+  height:3px;
+  background:linear-gradient(90deg,#22c55e,#06b6d4,#6366f1);
+  opacity:0;
+  transition:0.3s;
+}
+.card:hover{
+  transform:translateY(-8px);
+  border-color:rgba(34,197,94,0.3);
+  box-shadow:0 25px 50px rgba(0,0,0,0.3),0 0 40px rgba(34,197,94,0.04);
+}
+.card:hover::before{opacity:1}
+
+/* CARD IMAGE */
+.cimg-wrap{position:relative;width:100%;height:180px;overflow:hidden;background:#0d0d25}
+.cimg{width:100%;height:100%;object-fit:cover;display:block;transition:0.4s}
+.card:hover .cimg{transform:scale(1.05)}
+.cimg.hide{display:none}
+.no-img{width:100%;height:180px;background:linear-gradient(135deg,#1e1e4a,#141432);display:flex;align-items:center;justify-content:center;font-size:50px;opacity:0.3}
+.cimg-overlay{position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(transparent,rgba(7,7,26,0.8))}
+
+/* CARD BODY */
+.cbody{padding:16px}
+
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.tg{padding:4px 10px;border-radius:20px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.tg-assam{background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.12)}
+.tg-india{background:rgba(59,130,246,0.1);color:#3b82f6;border:1px solid rgba(59,130,246,0.12)}
+.tg-private{background:rgba(168,85,247,0.1);color:#a855f7;border:1px solid rgba(168,85,247,0.12)}
+.tg-dl{background:rgba(234,179,8,0.1);color:#eab308;border:1px solid rgba(234,179,8,0.12)}
+.tg-new{background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.12);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.5}}
+
+.ctitle{font-size:15px;font-weight:600;line-height:1.45;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:#e2e8f0}
+.cloc{font-size:12px;color:#94a3b8;margin-bottom:12px;display:flex;align-items:center;gap:5px}
+
+.cbtn{
+  width:100%;padding:11px;border:none;border-radius:13px;
+  background:linear-gradient(135deg,#6366f1,#4f46e5);
+  color:#fff;cursor:pointer;font-weight:600;font-size:13px;
+  transition:0.2s;display:flex;align-items:center;justify-content:center;gap:8px;
+  position:relative;overflow:hidden;
+}
+.cbtn::after{content:'';position:absolute;top:50%;left:50%;width:0;height:0;background:rgba(255,255,255,0.1);border-radius:50%;transition:0.4s;transform:translate(-50%,-50%)}
+.cbtn:hover::after{width:300px;height:300px}
+.cbtn:hover{box-shadow:0 6px 20px rgba(99,102,241,0.25)}
+
+/* EMPTY */
+.empty{grid-column:1/-1;text-align:center;padding:60px 20px}
+.empty .big{font-size:60px;margin-bottom:15px}
+.empty p{color:#94a3b8;font-size:14px}
+
+/* SKELETON */
+.sk{border-radius:20px;overflow:hidden}
+.sk-img{height:180px;background:linear-gradient(90deg,#12122a 25%,#1e1e4a 50%,#12122a 75%);background-size:200% 100%;animation:shim 1.5s infinite}
+.sk-body{padding:16px}
+.sk-line{height:14px;border-radius:8px;background:linear-gradient(90deg,#12122a 25%,#1e1e4a 50%,#12122a 75%);background-size:200% 100%;animation:shim 1.5s infinite;margin-bottom:10px}
+.sk-line.w60{width:60%}
+.sk-line.w80{width:80%}
+.sk-line.w40{width:40%}
+.sk-btn{height:42px;border-radius:13px;background:linear-gradient(90deg,#12122a 25%,#1e1e4a 50%,#12122a 75%);background-size:200% 100%;animation:shim 1.5s infinite;margin-top:10px}
+@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* PAGINATION */
+.pagination{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:6px;padding:0 20px 30px;position:relative;z-index:1}
+.pgbtn{min-width:38px;height:38px;padding:0 12px;background:rgba(20,20,50,0.7);border:1.5px solid #1e1e4a;border-radius:10px;color:#94a3b8;cursor:pointer;font-size:13px;font-weight:600;transition:0.2s}
+.pgbtn:hover:not(:disabled){border-color:#22c55e;color:#fff}
+.pgbtn.on{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border-color:#22c55e}
+.pgbtn:disabled{opacity:0.35;cursor:not-allowed}
+.pgdots{color:#475569;padding:0 4px;font-size:13px}
+
+/* AD BOX */
+.adbox{max-width:640px;margin:0 auto;padding:0 20px 10px;position:relative;z-index:1}
+.adlink{display:flex;align-items:center;justify-content:center;gap:10px;padding:15px 20px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:16px;color:#fff;text-decoration:none;font-weight:700;font-size:14px;box-shadow:0 8px 25px rgba(34,197,94,0.2);transition:0.25s}
+.adlink:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(34,197,94,0.3)}
+
+/* FOOTER */
+.foot{text-align:center;padding:30px;font-size:11px;color:#475569;position:relative;z-index:1}
+
+/* SCROLL TOP */
+.topbtn{position:fixed;bottom:24px;right:24px;width:46px;height:46px;background:linear-gradient(135deg,#22c55e,#16a34a);border:none;border-radius:50%;color:#fff;font-size:20px;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:100;box-shadow:0 8px 25px rgba(34,197,94,0.25);transition:0.3s}
+.topbtn.show{display:flex}
+.topbtn:hover{transform:translateY(-3px)}
+
+@media(max-width:640px){
+  .hero h1{font-size:24px}
+  .grid{grid-template-columns:1fr}
+  .cimg-wrap,.no-img{height:160px}
+}
+</style>
+</head>
+<body>
+
+<div class="g1"></div>
+<div class="g2"></div>
+
+<div class="hdr">
+  <div class="logo">🚀 Jobs Near Me</div>
+  <div class="mbtn" onclick="document.getElementById('mn').classList.toggle('show')">☰</div>
+</div>
+
+<div id="mn" class="mn">
+  <a href="/">🏠 Home</a>
+  <a href="/contact">📞 Contact</a>
+  <a href="/admin">⚙️ Admin</a>
+</div>
+
+<div class="hero">
+  <h1>Find Your <span class="hl">Dream Job</span><br>Near You</h1>
+  <p>Latest Government & Private Jobs</p>
+  <div class="live"><span class="dot"></span> Updated in real-time</div>
+</div>
+
+<div class="srch">
+  <div class="sbox">
+    <input id="q" placeholder="Search jobs, location..." oninput="dr()">
+    <button type="button" class="sbtn" onclick="PAGE=1;render()">🔍 Search</button>
+  </div>
+</div>
+
+<div class="tabwrap">
+  <div class="tabs" id="tabbar"></div>
+</div>
+
+<div id="stawrap" class="stawrap">
+  <select id="stsel" onchange="PAGE=1;render()">
+    <option value="">All States</option>
+    <option>Assam</option><option>Delhi</option><option>Maharashtra</option>
+    <option>West Bengal</option><option>Bihar</option><option>UP</option>
+    <option>Karnataka</option><option>Tamil Nadu</option><option>Gujarat</option>
+    <option>Rajasthan</option><option>Kerala</option><option>Punjab</option>
+  </select>
+</div>
+
+<div class="info" id="info"></div>
+
+<div class="grid" id="grid">
+  <div class="sk"><div class="sk-img"></div><div class="sk-body"><div class="sk-line w80"></div><div class="sk-line w60"></div><div class="sk-line w40"></div><div class="sk-btn"></div></div></div>
+  <div class="sk"><div class="sk-img"></div><div class="sk-body"><div class="sk-line w80"></div><div class="sk-line w60"></div><div class="sk-line w40"></div><div class="sk-btn"></div></div></div>
+  <div class="sk"><div class="sk-img"></div><div class="sk-body"><div class="sk-line w80"></div><div class="sk-line w60"></div><div class="sk-line w40"></div><div class="sk-btn"></div></div></div>
+</div>
+
+<div class="pagination" id="pagination"></div>
+
+<div class="adbox">
+  <!-- Yaha apna WhatsApp ad link daalein -->
+  <a href="https://wa.me/919999999999?text=Hi%2C%20I%20am%20interested%20in%20advertising" target="_blank" class="adlink">📢 Advertise Here — Chat on WhatsApp →</a>
+</div>
+
+<div class="foot">Made with ❤️ • Jobs Near Me © 2025</div>
+<button type="button" class="topbtn" id="topbtn" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+let TYPE="all",JOBS=[],TMR=null,PAGE=1;
+const PAGE_SIZE=20;
+
+document.addEventListener("click",e=>{
+  if(!e.target.closest(".mn")&&!e.target.closest(".mbtn"))
+    document.getElementById("mn").classList.remove("show");
+});
+
+function dr(){clearTimeout(TMR);TMR=setTimeout(()=>{PAGE=1;render()},300)}
+
+async function loadData(){
+  try{
+    let r=await fetch("/jobs?t="+Date.now());
+    let d=await r.json();
+    JOBS=d.data||[];
+    buildTabs();
+    render();
+  }catch(e){
+    document.getElementById("grid").innerHTML='<div class="empty"><div class="big">😵</div><p>Failed to load</p></div>';
+  }
+}
+
+function buildTabs(){
+  let c={all:JOBS.length,assam:0,india:0,private:0};
+  JOBS.forEach(j=>{let t=j.job_type||j.category||"";if(c[t]!==undefined)c[t]++});
+  document.getElementById("tabbar").innerHTML=`
+    <div class="tab ${TYPE==='all'?'on':''}" onclick="setTab('all',this)">🌟 All<span class="c">${c.all}</span></div>
+    <div class="tab ${TYPE==='assam'?'on':''}" onclick="setTab('assam',this)">📍 Assam<span class="c">${c.assam}</span></div>
+    <div class="tab ${TYPE==='india'?'on':''}" onclick="setTab('india',this)">🇮🇳 India<span class="c">${c.india}</span></div>
+    <div class="tab ${TYPE==='private'?'on':''}" onclick="setTab('private',this)">💼 Private<span class="c">${c.private}</span></div>`;
+}
+
+function setTab(t,el){
+  TYPE=t;
+  PAGE=1;
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+  el.classList.add("on");
+  document.getElementById("stawrap").classList.toggle("show",t==="india");
+  render();
+}
+
+function render(){
+  let q=document.getElementById("q").value.toLowerCase().trim();
+  let st=document.getElementById("stsel").value;
+
+  let f=JOBS.filter(j=>{
+    if(TYPE!=="all"&&(j.job_type||j.category)!==TYPE) return false;
+    if(TYPE==="india"&&st&&!(j.location||"").toLowerCase().includes(st.toLowerCase())) return false;
+    if(q){let s=((j.title||"")+(j.location||"")+(j.details||"")).toLowerCase();if(!s.includes(q)) return false}
+    return true;
+  });
+
+  document.getElementById("info").textContent=`${f.length} of ${JOBS.length} jobs`;
+
+  if(!f.length){
+    document.getElementById("grid").innerHTML='<div class="empty"><div class="big">😔</div><p>No jobs found</p></div>';
+    document.getElementById("pagination").innerHTML="";
+    return;
+  }
+
+  let totalPages=Math.max(1,Math.ceil(f.length/PAGE_SIZE));
+  if(PAGE>totalPages) PAGE=totalPages;
+  if(PAGE<1) PAGE=1;
+  let start=(PAGE-1)*PAGE_SIZE;
+  let pageItems=f.slice(start,start+PAGE_SIZE);
+
+  let h="";
+  pageItems.forEach(j=>{
+    let cat=j.job_type||j.category||"assam";
+    let isNew=(Date.now()/1000-(j.created_at||0))<172800;
+    let dl=j.deadline?`<span class="tg tg-dl">⏳ ${e(j.deadline)}</span>`:"";
+    let nw=isNew?`<span class="tg tg-new">🔥 NEW</span>`:"";
+
+    let imgBlock;
+    if(j.image){
+      imgBlock=`<div class="cimg-wrap">
+        <img src="${e(j.image)}" class="cimg" onerror="this.parentElement.innerHTML='<div class=no-img>💼</div>'">
+        <div class="cimg-overlay"></div>
+      </div>`;
+    }else{
+      imgBlock=`<div class="no-img">💼</div>`;
+    }
+
+    h+=`<div class="card" onclick="location='/job-page?id=${e(j.id)}'">
+      ${imgBlock}
+      <div class="cbody">
+        <div class="tags"><span class="tg tg-${cat}">${e(cat.toUpperCase())}</span>${dl}${nw}</div>
+        <div class="ctitle">${e(j.title||"Untitled")}</div>
+        <div class="cloc">📍 ${e(j.location||"India")}</div>
+        <button type="button" class="cbtn" onclick="event.stopPropagation();location='/job-page?id=${e(j.id)}'">View Details →</button>
+      </div>
+    </div>`;
+  });
+
+  document.getElementById("grid").innerHTML=h;
+  renderPagination(totalPages);
+}
+
+function renderPagination(totalPages){
+  let el=document.getElementById("pagination");
+  if(totalPages<=1){el.innerHTML="";return}
+
+  let h=`<button type="button" class="pgbtn" ${PAGE===1?"disabled":""} onclick="goPage(${PAGE-1})">← Prev</button>`;
+
+  let maxBtns=5;
+  let s=Math.max(1,PAGE-2);
+  let en=Math.min(totalPages,s+maxBtns-1);
+  s=Math.max(1,en-maxBtns+1);
+
+  if(s>1){
+    h+=`<button type="button" class="pgbtn" onclick="goPage(1)">1</button>`;
+    if(s>2) h+=`<span class="pgdots">…</span>`;
+  }
+  for(let i=s;i<=en;i++){
+    h+=`<button type="button" class="pgbtn ${i===PAGE?"on":""}" onclick="goPage(${i})">${i}</button>`;
+  }
+  if(en<totalPages){
+    if(en<totalPages-1) h+=`<span class="pgdots">…</span>`;
+    h+=`<button type="button" class="pgbtn" onclick="goPage(${totalPages})">${totalPages}</button>`;
+  }
+
+  h+=`<button type="button" class="pgbtn" ${PAGE===totalPages?"disabled":""} onclick="goPage(${PAGE+1})">Next →</button>`;
+  el.innerHTML=h;
+}
+
+function goPage(p){
+  PAGE=p;
+  render();
+  scrollTo({top:0,behavior:"smooth"});
+}
+
+function e(t){if(!t)return"";let d=document.createElement("div");d.textContent=String(t);return d.innerHTML}
+
+window.addEventListener("scroll",()=>document.getElementById("topbtn").classList.toggle("show",scrollY>400));
+
+loadData();
+</script>
+</body>
+</html>

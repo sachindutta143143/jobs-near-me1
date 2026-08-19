@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Details</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#07071a;color:#fff}
+
+.g1{position:fixed;top:-200px;right:-200px;width:500px;height:500px;background:radial-gradient(circle,rgba(99,102,241,0.05),transparent 70%);pointer-events:none}
+
+.hdr{padding:14px 20px;background:rgba(7,7,26,0.9);backdrop-filter:blur(25px);display:flex;align-items:center;gap:12px;font-weight:600;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,0.04)}
+.bk{cursor:pointer;color:#94a3b8;padding:9px 16px;background:rgba(30,30,74,0.8);border:1px solid #2a2a5a;border-radius:12px;text-decoration:none;font-size:13px;transition:0.2s}
+.bk:hover{background:#1e1e4a;border-color:#22c55e;color:#fff}
+
+.wrap{padding:20px;max-width:800px;margin:auto;position:relative;z-index:1}
+
+.crd{background:linear-gradient(155deg,rgba(25,25,65,0.85),rgba(12,12,35,0.95));border:1.5px solid rgba(30,30,74,0.6);padding:20px;border-radius:20px;margin-bottom:16px;position:relative;overflow:hidden}
+.crd::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#22c55e,#06b6d4,#6366f1)}
+
+.jimg{width:100%;border-radius:16px;margin-bottom:14px;max-height:350px;object-fit:cover;border:1px solid #1e1e4a}
+.jimg.hide{display:none}
+
+.ttl{font-size:22px;font-weight:700;margin-bottom:12px;line-height:1.4;color:#e2e8f0}
+
+.tg{padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;display:inline-block;margin:0 6px 8px 0}
+.tg-g{background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.12)}
+.tg-b{background:rgba(59,130,246,0.1);color:#3b82f6;border:1px solid rgba(59,130,246,0.12)}
+.tg-r{background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.12)}
+
+.sum{background:rgba(7,7,26,0.6);border:1.5px solid #1e1e4a;padding:18px;border-radius:16px;margin-bottom:16px;font-size:14px;line-height:1.7;color:#94a3b8}
+.sum b{color:#fff}
+
+.det{white-space:pre-line;font-size:14px;line-height:1.8;color:#94a3b8}
+
+.abtn{display:block;text-align:center;padding:16px;background:linear-gradient(135deg,#6366f1,#4f46e5);border-radius:14px;margin-top:16px;color:#fff;text-decoration:none;font-weight:700;font-size:15px;transition:0.2s;position:relative;overflow:hidden}
+.abtn::after{content:'';position:absolute;top:50%;left:50%;width:0;height:0;background:rgba(255,255,255,0.1);border-radius:50%;transition:0.4s;transform:translate(-50%,-50%)}
+.abtn:hover::after{width:400px;height:400px}
+.abtn:hover{box-shadow:0 8px 25px rgba(99,102,241,0.3)}
+
+.lnks{margin:16px 0}
+.lnks a{display:flex;justify-content:space-between;align-items:center;background:rgba(7,7,26,0.6);border:1.5px solid #1e1e4a;padding:15px 18px;border-radius:14px;margin-bottom:10px;color:#fff;text-decoration:none;font-size:14px;transition:0.25s}
+.lnks a:hover{border-color:#22c55e;background:rgba(34,197,94,0.03);transform:translateX(4px)}
+.lnks a span{color:#22c55e;font-weight:700;font-size:13px}
+
+.loading{text-align:center;margin-top:60px;opacity:0.5;font-size:14px}
+
+.shr{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.shr a,.shr div{padding:10px 16px;background:rgba(20,20,50,0.7);border:1.5px solid #1e1e4a;border-radius:12px;cursor:pointer;font-size:13px;color:#94a3b8;text-decoration:none;transition:0.2s;display:inline-flex;align-items:center;gap:6px}
+.shr a:hover,.shr div:hover{background:rgba(34,197,94,0.05);border-color:#22c55e;color:#fff}
+</style>
+</head>
+<body>
+<div class="g1"></div>
+
+<div class="hdr">
+  <a class="bk" onclick="history.back()||location.replace('/')">← Back</a>
+  <span>Job Details</span>
+</div>
+
+<div class="wrap">
+  <div id="out" class="loading">⏳ Loading job details...</div>
+</div>
+
+<script>
+let id=new URLSearchParams(location.search).get("id");
+
+function fx(u){
+  if(!u)return"";
+  u=u.trim();
+  if(u.startsWith("http"))return u;
+  if(u.startsWith("//"))return"https:"+u;
+  return"https://"+u;
+}
+
+function e(v){if(!v)return"";let d=document.createElement("div");d.textContent=String(v);return d.innerHTML}
+
+function cl(t){
+  if(!t)return"";
+  t=t.replace(/https?:\/\/\S+/gi,"");
+  t=t.replace(/www\.\S+/gi,"");
+  t=t.replace(/\b[\w.-]+\.(com|in|org|net|gov|edu)\b/gi,"");
+  t=t.replace(/\n\s*\n\s*\n/g,"\n\n");
+  return t.trim();
+}
+
+async function load(){
+  if(!id){document.getElementById("out").innerHTML="❌ No job ID";return}
+
+  try{
+    let r=await fetch("/job/"+id+"?t="+Date.now());
+    if(!r.ok){document.getElementById("out").innerHTML="❌ Not found";return}
+    let j=await r.json();
+    if(j.error){document.getElementById("out").innerHTML="❌ "+j.error;return}
+
+    let sum=j.details?cl(j.details).split(" ").slice(0,50).join(" ")+"...":"";
+
+    let img="";
+    if(j.image){
+      let imgUrl=fx(j.image);
+      img=`<img src="${imgUrl}" class="jimg" onerror="this.classList.add('hide')">`;
+    }
+
+    let abtn=j.apply_link?`<a href="${fx(j.apply_link)}" target="_blank" class="abtn">🚀 Apply Now</a>`:"";
+
+    let lnks="";
+    if(j.apply_link||j.link2||j.link3){
+      lnks='<div class="lnks">';
+      if(j.apply_link) lnks+=`<a href="${fx(j.apply_link)}" target="_blank">📝 Apply Online <span>Open →</span></a>`;
+      if(j.link3) lnks+=`<a href="${fx(j.link3)}" target="_blank">📄 Notification / PDF <span>Open →</span></a>`;
+      if(j.link2) lnks+=`<a href="${fx(j.link2)}" target="_blank">🌐 Official Website <span>Open →</span></a>`;
+      lnks+='</div>';
+    }
+
+    let dl=j.deadline?`<span class="tg tg-r">⏳ Last Date: ${e(j.deadline)}</span>`:"";
+    let st=encodeURIComponent((j.title||"Job")+" - Apply Now!");
+    let su=encodeURIComponent(location.href);
+
+    document.title=(j.title||"Job")+" - Apply Online";
+
+    document.getElementById("out").innerHTML=`
+      <div class="crd">
+        ${img}
+        <div class="ttl">${e(j.title)}</div>
+        <span class="tg tg-g">📍 ${e(j.location||"India")}</span>
+        <span class="tg tg-b">${e(j.category||"Job")}</span>
+        ${dl}
+      </div>
+
+      ${sum?`<div class="sum"><b>📋 Quick Summary</b><br><br>${e(sum)}</div>`:""}
+
+      ${lnks}
+
+      <div class="crd">
+        <b style="font-size:16px">📄 Full Details</b><br><br>
+        <div class="det">${e(cl(j.details)||"Details will be updated soon.")}</div>
+        ${abtn}
+      </div>
+
+      <div class="crd">
+        <b>📤 Share This Job</b>
+        <div class="shr">
+          <a href="https://wa.me/?text=${st}%20${su}" target="_blank">📱 WhatsApp</a>
+          <a href="https://t.me/share/url?url=${su}&text=${st}" target="_blank">✈️ Telegram</a>
+          <a href="https://www.facebook.com/sharer/sharer.php?u=${su}" target="_blank">📘 Facebook</a>
+          <div onclick="navigator.clipboard.writeText(location.href).then(()=>alert('✅ Link Copied!'))">📋 Copy Link</div>
+        </div>
+      </div>`;
+  }catch(err){
+    document.getElementById("out").innerHTML="❌ Error loading";
+  }
+}
+
+load();
+</script>
+</body>
+</html>
